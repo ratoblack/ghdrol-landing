@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 import QRCode from "react-qr-code";
 import type { Offer } from "@/lib/offers";
+import { TRACKING_QUERY_KEYS } from "@/lib/tracking";
 
 type Props = {
   offer: Offer;
@@ -24,6 +26,16 @@ export function PixCheckoutForm({
   hasApiKeyConfigured,
   hostedCheckoutUrl,
 }: Props) {
+  const sp = useSearchParams();
+  const tracking = useMemo(() => {
+    const out: Record<string, string> = {};
+    for (const k of TRACKING_QUERY_KEYS) {
+      const v = sp.get(k);
+      if (v) out[k] = v;
+    }
+    return Object.keys(out).length ? out : undefined;
+  }, [sp]);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [document, setDocument] = useState("");
@@ -44,6 +56,7 @@ export function PixCheckoutForm({
           name,
           email,
           document,
+          ...(tracking ? { tracking } : {}),
         }),
       });
       const data = (await res.json().catch(() => null)) as

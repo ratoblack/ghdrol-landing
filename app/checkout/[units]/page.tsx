@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { PixCheckoutForm } from "@/components/checkout/PixCheckoutForm";
 import type { OfferUnits } from "@/lib/checkout";
 import { getPagouCheckoutUrl } from "@/lib/checkout";
@@ -33,11 +34,20 @@ export default async function CheckoutPage({ params }: Props) {
           Valor à vista: <strong className="text-white">{offer.cashPrice}</strong>
         </p>
         <div className="mt-8">
-          <PixCheckoutForm
-            offer={offer}
-            hasApiKeyConfigured={hasApiKeyConfigured}
-            hostedCheckoutUrl={getPagouCheckoutUrl(offer.units)}
-          />
+          <Suspense
+            fallback={
+              <div
+                className="h-64 animate-pulse rounded-xl bg-white/5"
+                aria-busy="true"
+              />
+            }
+          >
+            <PixCheckoutForm
+              offer={offer}
+              hasApiKeyConfigured={hasApiKeyConfigured}
+              hostedCheckoutUrl={getPagouCheckoutUrl(offer.units)}
+            />
+          </Suspense>
         </div>
         <Link
           href="/#oferta"

@@ -31,7 +31,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${bebas.variable} ${dmSans.variable} h-full`}>
+    <html
+      lang="pt-BR"
+      className={`${bebas.variable} ${dmSans.variable} h-full scroll-smooth`}
+    >
       <body className="min-h-full flex flex-col font-sans antialiased">
         {children}
       </body>

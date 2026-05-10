@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 import { OFFERS } from "@/lib/offers";
 import { CtaButton } from "./CtaButton";
 import { SectionTitle } from "./SectionTitle";
+import { TrackedCheckoutLink } from "./TrackedCheckoutLink";
 
 export function Pricing() {
   return (
@@ -65,12 +65,12 @@ export function Pricing() {
                   </p>
                 </div>
               </div>
-              <Link
-                href={`/checkout/${o.units}`}
+              <TrackedCheckoutLink
+                units={o.units}
                 className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-gradient-to-b from-gh-gold-bright to-gh-gold py-3 text-center text-base font-bold uppercase tracking-wide text-black transition hover:brightness-110"
               >
                 Quero comprar este
-              </Link>
+              </TrackedCheckoutLink>
             </article>
           ))}
         </div>

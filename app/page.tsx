@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
   AudienceList,
   BenefitsGrid,
@@ -35,7 +36,11 @@ export default function HomePage() {
         <Testimonials />
         <WhySection />
         <GuaranteeSection />
-        <Pricing />
+        <Suspense
+          fallback={<div className="min-h-[36rem] w-full" aria-busy="true" />}
+        >
+          <Pricing />
+        </Suspense>
         <ProtocolSection />
         <DecisionSection />
         <AboutSection />

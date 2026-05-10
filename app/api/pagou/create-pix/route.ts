@@ -3,6 +3,7 @@ import type { OfferUnits } from "@/lib/checkout";
 import { createPixTransaction } from "@/lib/pagou";
 import { savePendingOrder } from "@/lib/order-store";
 import { getOfferByUnits } from "@/lib/offers";
+import { parseTrackingFromRequestBody } from "@/lib/tracking";
 
 const VALID: OfferUnits[] = ["1", "2", "3", "5"];
 
@@ -22,12 +23,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  const b = body as {
+  const b = body as Record<string, unknown> & {
     units?: string;
     name?: string;
     email?: string;
     document?: string;
   };
+  const tracking = parseTrackingFromRequestBody(b);
 
   if (!b.units || !isOfferUnits(b.units)) {
     return NextResponse.json({ error: "Oferta inválida" }, { status: 400 });
@@ -69,6 +71,7 @@ export async function POST(request: Request) {
     name,
     amountCents: offer.amountCents,
     createdAt: new Date().toISOString(),
+    ...(tracking ? { tracking } : {}),
   });
 
   return NextResponse.json({
