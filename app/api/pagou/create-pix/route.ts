@@ -13,6 +13,7 @@ function isOfferUnits(u: string): u is OfferUnits {
 }
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -63,53 +64,66 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Oferta não encontrada" }, { status: 400 });
   }
 
-  const result = await createPixTransaction({
-    offer,
-    buyer: { name, email, cpfDigits },
-  });
-
-  if (!result.ok) {
-    const raw = result.body;
-    const payload: Record<string, unknown> =
-      raw !== null && typeof raw === "object" && !Array.isArray(raw)
-        ? { ...(raw as Record<string, unknown>) }
-        : { error: String(raw) };
-
-    if (result.status === 401 && !payload.detail) {
-      payload.detail =
-        "Pagou recusou o token. Verifique PAGOU_API_KEY e se PAGOU_ENV (sandbox ou production) corresponde ao token no painel Pagou.";
-    }
-    if (result.status === 403 && !payload.detail) {
-      payload.detail =
-        "Acesso negado pela Pagou. Confira permissões da chave e se a conta está ativa.";
-    }
-
-    return NextResponse.json(payload, { status: result.status });
-  }
-
   try {
-    await savePendingOrder({
-      transactionId: result.id,
-      externalRef: result.externalRef,
-      units: b.units,
-      email,
-      name,
-      amountCents: offer.amountCents,
-      createdAt: new Date().toISOString(),
-      ...(tracking ? { tracking } : {}),
+    const result = await createPixTransaction({
+      offer,
+      buyer: { name, email, cpfDigits },
     });
-  } catch (persistErr) {
-    console.error("[create-pix] savePendingOrder:", persistErr);
-    /** Pix já criado na Pagou — não falhamos o cliente se só o Redis/log falhou. */
-  }
 
-  return NextResponse.json({
-    id: result.id,
-    status: result.status,
-    pix: {
-      qr_code: result.qrCode,
-      expiration_date: result.expirationDate,
-    },
-    external_ref: result.externalRef,
-  });
+    if (!result.ok) {
+      const raw = result.body;
+      const payload: Record<string, unknown> =
+        raw !== null && typeof raw === "object" && !Array.isArray(raw)
+          ? { ...(raw as Record<string, unknown>) }
+          : { error: String(raw) };
+
+      if (result.status === 401 && !payload.detail) {
+        payload.detail =
+          "Pagou recusou o token. Verifique PAGOU_API_KEY e se PAGOU_ENV (sandbox ou production) corresponde ao token no painel Pagou.";
+      }
+      if (result.status === 403 && !payload.detail) {
+        payload.detail =
+          "Acesso negado pela Pagou. Confira permissões da chave e se a conta está ativa.";
+      }
+
+      return NextResponse.json(payload, { status: result.status });
+    }
+
+    try {
+      await savePendingOrder({
+        transactionId: result.id,
+        externalRef: result.externalRef,
+        units: b.units,
+        email,
+        name,
+        amountCents: offer.amountCents,
+        createdAt: new Date().toISOString(),
+        ...(tracking ? { tracking } : {}),
+      });
+    } catch (persistErr) {
+      console.error("[create-pix] savePendingOrder:", persistErr);
+    }
+
+    return NextResponse.json({
+      id: result.id,
+      status: result.status,
+      pix: {
+        qr_code: result.qrCode,
+        expiration_date: result.expirationDate,
+      },
+      external_ref: result.externalRef,
+    });
+  } catch (err) {
+    console.error("[create-pix] unexpected:", err);
+    return NextResponse.json(
+      {
+        error: "unexpected",
+        detail:
+          err instanceof Error
+            ? err.message
+            : "Erro interno ao gerar o Pix. Veja os logs da função na Vercel.",
+      },
+      { status: 500 },
+    );
+  }
 }

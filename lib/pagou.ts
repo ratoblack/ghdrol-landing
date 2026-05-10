@@ -1,5 +1,17 @@
 import type { Offer } from "./offers";
 
+function normalizePagouApiKey(raw: string | undefined): string | undefined {
+  if (raw === undefined) return undefined;
+  let k = raw.trim();
+  if (
+    (k.startsWith('"') && k.endsWith('"')) ||
+    (k.startsWith("'") && k.endsWith("'"))
+  ) {
+    k = k.slice(1, -1).trim();
+  }
+  return k.length ? k : undefined;
+}
+
 /** URL pública do site (para notify_url dos webhooks Pagou). */
 export function getPublicBaseUrl(): string | undefined {
   const explicit = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "");
@@ -58,15 +70,15 @@ export function getPagouApiBase(): string {
 export async function createPixTransaction(
   input: CreatePixInput,
 ): Promise<CreatePixResult> {
-  const key = process.env.PAGOU_API_KEY?.trim();
+  const key = normalizePagouApiKey(process.env.PAGOU_API_KEY);
   if (!key) {
     return {
       ok: false,
-      status: 500,
+      status: 503,
       body: {
         error: "missing_api_key",
         detail:
-          "PAGOU_API_KEY não definida no servidor (ex.: Vercel → Environment Variables → Production).",
+          "PAGOU_API_KEY não está disponível neste deployment. Na Vercel: Environment Variables → Production → nome exato PAGOU_API_KEY → Save → Redeploy obrigatório.",
       },
     };
   }
@@ -93,16 +105,34 @@ export async function createPixTransaction(
     ],
   };
 
-  if (notifyUrl) payload.notify_url = notifyUrl;
+  /** Diagnóstico: se a criação falhar, experimente PAGOU_OMIT_NOTIFY_URL=1 na Vercel (webhook omitido). */
+  const omitNotify =
+    process.env.PAGOU_OMIT_NOTIFY_URL === "1" ||
+    process.env.PAGOU_OMIT_NOTIFY_URL === "true";
+  if (notifyUrl && !omitNotify) payload.notify_url = notifyUrl;
 
-  const res = await fetch(`${getPagouApiBase()}/v2/transactions`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${getPagouApiBase()}/v2/transactions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (fetchErr) {
+    console.error("[pagou] fetch error:", fetchErr);
+    return {
+      ok: false,
+      status: 503,
+      body: {
+        error: "pagou_unreachable",
+        detail:
+          "Não foi possível ligar à API Pagou a partir do servidor (rede ou DNS). Tente de novo; se persistir, verifique status Pagou ou bloqueios.",
+      },
+    };
+  }
 
   const json: unknown = await res.json().catch(() => null);
 
