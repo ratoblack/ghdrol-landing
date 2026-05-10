@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { OfferUnits } from "@/lib/checkout";
 import { createPixTransaction } from "@/lib/pagou";
+import { savePendingOrder } from "@/lib/order-store";
 import { getOfferByUnits } from "@/lib/offers";
 
 const VALID: OfferUnits[] = ["1", "2", "3", "5"];
@@ -59,6 +60,16 @@ export async function POST(request: Request) {
   if (!result.ok) {
     return NextResponse.json(result.body, { status: result.status });
   }
+
+  await savePendingOrder({
+    transactionId: result.id,
+    externalRef: result.externalRef,
+    units: b.units,
+    email,
+    name,
+    amountCents: offer.amountCents,
+    createdAt: new Date().toISOString(),
+  });
 
   return NextResponse.json({
     id: result.id,
