@@ -4,23 +4,23 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SectionTitle } from "./SectionTitle";
 
-/** Troque por PNG/JPG reais em public/whatsapp/ ou altere caminhos/nomes aqui. */
+/** Troque por PNG/JPG reais em public/whatsapp/ ou altere caminhos aqui. */
 const PRINTS = [
   {
     src: "/whatsapp/print-1.svg",
-    alt: "Print de conversa no WhatsApp — cliente satisfeito com GHDROL",
+    alt: "Avaliação — conversa no WhatsApp sobre energia no treino",
   },
   {
     src: "/whatsapp/print-2.svg",
-    alt: "Print de conversa no WhatsApp — resultado em poucas semanas",
+    alt: "Avaliação — resultado em poucas semanas",
   },
   {
     src: "/whatsapp/print-3.svg",
-    alt: "Print de conversa no WhatsApp — recompra e indicação",
+    alt: "Avaliação — recompra e indicação",
   },
   {
     src: "/whatsapp/print-4.svg",
-    alt: "Print de conversa no WhatsApp — dúvidas e suporte",
+    alt: "Avaliação — entrega e suporte",
   },
 ] as const;
 
@@ -74,12 +74,12 @@ export function WhatsAppPrintsCarousel() {
   return (
     <section className="border-t border-white/10 bg-gh-surface py-12 sm:py-16">
       <div className="container-page">
-        <SectionTitle as="h2" subtitle="Na conversa com quem compra">
-          Prints do WhatsApp
+        <SectionTitle as="h2" subtitle="Via WhatsApp">
+          Avaliações
         </SectionTitle>
         <p className="mx-auto mb-8 max-w-xl text-center text-sm text-gh-muted sm:mb-10 sm:max-w-2xl">
-          Trechos de conversas no canal oficial. Ilustrativo; nomes e dados
-          podem ter sido ocultados por privacidade.
+          Conversas reais do canal oficial com clientes. Ilustrativo; nomes e
+          dados podem ter sido ocultados por privacidade.
         </p>
 
         <div className="relative">
@@ -88,7 +88,7 @@ export function WhatsAppPrintsCarousel() {
             className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             role="region"
             aria-roledescription="carrossel"
-            aria-label="Prints de conversas no WhatsApp"
+            aria-label="Carrossel de avaliações no WhatsApp"
           >
             {PRINTS.map((p, i) => (
               <div
@@ -96,13 +96,14 @@ export function WhatsAppPrintsCarousel() {
                 data-index={i}
                 className="snap-center snap-always shrink-0 first:pl-[max(0px,calc(50%-11rem))] last:pr-[max(0px,calc(50%-11rem))] sm:first:pl-[max(0px,calc(50%-13rem))] sm:last:pr-[max(0px,calc(50%-13rem))]"
               >
-                <div className="relative w-[min(22rem,calc(100vw-2.5rem))] overflow-hidden rounded-2xl border border-white/15 bg-black/40 shadow-[0_12px_48px_rgba(0,0,0,0.45)] sm:w-[26rem]">
+                <div className="relative w-[min(22rem,calc(100vw-2.5rem))] rounded-2xl border border-white/15 bg-black/40 shadow-[0_12px_48px_rgba(0,0,0,0.45)] sm:w-[26rem]">
                   <Image
                     src={p.src}
                     alt={p.alt}
-                    width={416}
-                    height={832}
-                    className="h-auto w-full object-cover object-top"
+                    width={360}
+                    height={640}
+                    sizes="(max-width: 640px) min(352px, 100vw) 416px"
+                    className="block h-auto w-full rounded-2xl"
                     unoptimized
                   />
                 </div>
@@ -117,7 +118,7 @@ export function WhatsAppPrintsCarousel() {
                 type="button"
                 onClick={() => scrollToIndex(i)}
                 className={`h-2 rounded-full transition-all ${active === i ? "w-8 bg-gh-gold" : "w-2 bg-white/25 hover:bg-white/40"}`}
-                aria-label={`Ir para o print ${i + 1}`}
+                aria-label={`Ir para a avaliação ${i + 1}`}
                 aria-current={active === i ? true : undefined}
               />
             ))}

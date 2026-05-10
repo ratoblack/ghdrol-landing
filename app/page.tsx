@@ -10,6 +10,7 @@ import { Hero, IntroBlocks } from "@/components/landing/Hero";
 import { FloatingCta } from "@/components/landing/FloatingCta";
 import {
   AboutSection,
+  BrandAuthoritySection,
   DecisionSection,
   GuaranteeSection,
   TrustSection,
@@ -44,6 +45,7 @@ export default function HomePage() {
         </Suspense>
         <DecisionSection />
         <AboutSection />
+        <BrandAuthoritySection />
         <WarningSection />
         <TrustSection />
         <Faq />

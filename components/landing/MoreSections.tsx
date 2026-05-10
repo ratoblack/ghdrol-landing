@@ -1,3 +1,6 @@
+import Image from "next/image";
+import { SectionTitle } from "./SectionTitle";
+
 export function GuaranteeSection() {
   return (
     <section className="py-12 sm:py-14">
@@ -78,6 +81,64 @@ export function AboutSection() {
           performance humana — referência em produtos que conversam com quem
           treina forte e busca excelência sem gambiarra.
         </p>
+      </div>
+    </section>
+  );
+}
+
+/** Fotos institucionais — sede/indústria e frota (reforço de confiança). */
+export function BrandAuthoritySection() {
+  return (
+    <section className="border-t border-white/10 bg-gradient-to-b from-black/50 via-gh-surface/40 to-black/40 py-12 sm:py-16">
+      <div className="container-page">
+        <SectionTitle as="h2" subtitle="Estrutura real por trás do produto">
+          Autoridade da marca
+        </SectionTitle>
+        <p className="mx-auto -mt-2 mb-10 max-w-2xl text-center text-sm leading-relaxed text-gh-muted sm:mb-12 sm:text-base">
+          A Ghmuscle investe em presença física e logística identificada: você
+          compra de quem fabrica e entrega com padrão profissional, não de
+          revenda anônima.
+        </p>
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-12 lg:items-start">
+          <article className="flex flex-col">
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-[0_12px_48px_rgba(0,0,0,0.35)] sm:aspect-[4/5]">
+              <Image
+                src="/authority/fabrica-sede.png"
+                alt="Instalações Ghmuscle — equipa à frente da sede com fachada da marca"
+                fill
+                className="object-cover object-[center_30%] sm:object-center"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+            <h3 className="mt-5 font-display text-xl uppercase tracking-wide text-gh-gold-bright sm:text-2xl">
+              Fábrica e sede
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-gh-muted sm:text-base">
+              Ambiente industrial e equipe alinhada à marca: transmite escala,
+              seriedade e continuidade do produto que chega até você — sem
+              promessas vazias de &ldquo;quem vende por fora&rdquo;.
+            </p>
+          </article>
+          <article className="flex flex-col">
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-[0_12px_48px_rgba(0,0,0,0.35)] sm:aspect-[4/5]">
+              <Image
+                src="/authority/frota-entrega.png"
+                alt="Veículo de entregas Ghmuscle — frota com identidade visual oficial"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+            <h3 className="mt-5 font-display text-xl uppercase tracking-wide text-gh-gold-bright sm:text-2xl">
+              Entrega com identidade
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-gh-muted sm:text-base">
+              Frota com o visual oficial da marca reforça que o pedido segue um
+              fluxo logístico profissional — da origem até a sua porta, com
+              rastreio e suporte no canal oficial.
+            </p>
+          </article>
+        </div>
       </div>
     </section>
   );

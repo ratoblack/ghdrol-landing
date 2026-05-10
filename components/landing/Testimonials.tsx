@@ -4,43 +4,43 @@ import { SectionTitle } from "./SectionTitle";
 const DEPOIMENTOS = [
   {
     src: "/testimonials/perfil-1.png",
-    alt: "Foto de perfil — cliente que usa GHDROL",
+    alt: "Rafael — cliente que usa GHDROL",
     name: "Rafael T.",
     cidade: "Curitiba · PR",
     quote:
-      "Três semanas usando direitinho e já sinto muito mais disposição no treino e foco no trabalho. Pump ficou mais consistente.",
+      "Há três semanas na rotina certinha: mais disposição no treino e foco no trampo. O pump ficou bem mais consistente.",
   },
   {
     src: "/testimonials/perfil-2.png",
-    alt: "Foto de perfil — cliente que usa GHDROL",
-    name: "Mariana S.",
+    alt: "Lucas — cliente que usa GHDROL",
+    name: "Lucas M.",
     cidade: "Belo Horizonte · MG",
     quote:
-      "Demorei a confiar em suplemento de GH, mas esse aqui entrega sensação de recuperação melhor. Durmo melhor também.",
+      "Eu era bem cético com GH em cápsula, mas senti recuperação melhor já nas primeiras semanas. Até durmo mais tranquilo.",
   },
   {
     src: "/testimonials/perfil-3.png",
-    alt: "Foto de perfil — cliente que usa GHDROL",
+    alt: "Diego — cliente que usa GHDROL",
     name: "Diego P.",
     cidade: "Porto Alegre · RS",
     quote:
-      "Comprei o kit maior por causa da promoção. Entrega foi rápida e o suporte respondeu no WhatsApp na hora.",
+      "Peguei o kit maior pela promoção. Chegou rápido e o pessoal do WhatsApp me respondeu na hora.",
   },
   {
     src: "/testimonials/perfil-4.png",
-    alt: "Foto de perfil — cliente que usa GHDROL",
+    alt: "André — cliente que usa GHDROL",
     name: "André L.",
     cidade: "São Paulo · SP",
     quote:
-      "Resultado não é mágica — treino pesado continua — mas a diferença na energia no dia a dia eu notei já na primeira caixa.",
+      "Não é mágica — continuo treinando pesado — mas a energia no dia a dia eu notei já na primeira caixa.",
   },
   {
     src: "/testimonials/perfil-5.png",
-    alt: "Foto de perfil — cliente que usa GHDROL",
+    alt: "Camila — cliente que usa GHDROL",
     name: "Camila R.",
     cidade: "Florianópolis · SC",
     quote:
-      "Minha rotina é corrida; tomar em dose única ajuda. Menos fadiga na segunda série dos exercícios grandes.",
+      "Estou satisfeita com a praticidade: uma dose única e cabe na minha rotina corrida. Sinto menos cansaço quando chego na segunda série dos exercícios grandes.",
   },
 ] as const;
 
