@@ -65,10 +65,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await createPixTransaction({
-      offer,
-      buyer: { name, email, cpfDigits },
-    });
+    const result = await createPixTransaction(
+      {
+        offer,
+        buyer: { name, email, cpfDigits },
+      },
+      request,
+    );
 
     if (!result.ok) {
       const raw = result.body;

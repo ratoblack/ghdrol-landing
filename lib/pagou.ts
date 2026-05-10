@@ -1,6 +1,6 @@
 import type { Offer } from "./offers";
 
-function normalizePagouApiKey(raw: string | undefined): string | undefined {
+export function normalizePagouApiKey(raw: string | undefined): string | undefined {
   if (raw === undefined) return undefined;
   let k = raw.trim();
   if (
@@ -16,6 +16,8 @@ function normalizePagouApiKey(raw: string | undefined): string | undefined {
 export function getPublicBaseUrl(): string | undefined {
   const explicit = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "");
   if (explicit) return explicit;
+  const pagouOnly = process.env.PAGOU_PUBLIC_BASE_URL?.trim().replace(/\/$/, "");
+  if (pagouOnly) return pagouOnly;
   const vercel = process.env.VERCEL_URL?.trim();
   if (vercel) return `https://${vercel.replace(/^https?:\/\//, "")}`;
   return undefined;
@@ -25,6 +27,59 @@ export function getWebhookNotifyUrl(): string | undefined {
   const base = getPublicBaseUrl();
   if (!base) return undefined;
   return `${base}/api/webhooks/pagou`;
+}
+
+/**
+ * notify_url para a Pagou: env explícito primeiro; senão deriva do pedido (Host /
+ * X-Forwarded-*), útil na Vercel sem NEXT_PUBLIC_APP_URL.
+ */
+export function resolveWebhookNotifyUrl(request?: Request): string | undefined {
+  const omit =
+    process.env.PAGOU_OMIT_NOTIFY_URL === "1" ||
+    process.env.PAGOU_OMIT_NOTIFY_URL === "true";
+  if (omit) return undefined;
+
+  const fromEnv = getWebhookNotifyUrl();
+  if (fromEnv) return fromEnv;
+
+  if (!request) return undefined;
+
+  const rawHost =
+    request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "";
+  const host = rawHost.split(",")[0]?.trim().replace(/^https?:\/\//, "");
+  if (!host) return undefined;
+
+  let proto =
+    request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() ?? "";
+  if (!proto) proto = host.includes("localhost") ? "http" : "https";
+
+  return `${proto}://${host}/api/webhooks/pagou`;
+}
+
+function pickPixField(
+  pix: unknown,
+  snake: string,
+  camel: string,
+): string | undefined {
+  if (!pix || typeof pix !== "object") return undefined;
+  const o = pix as Record<string, unknown>;
+  const a = o[snake];
+  const b = o[camel];
+  if (typeof a === "string" && a.length > 0) return a;
+  if (typeof b === "string" && b.length > 0) return b;
+  return undefined;
+}
+
+function pickExpiration(pix: unknown): string | null | undefined {
+  if (!pix || typeof pix !== "object") return undefined;
+  const o = pix as Record<string, unknown>;
+  if ("expiration_date" in o && o.expiration_date === null) return null;
+  if ("expirationDate" in o && o.expirationDate === null) return null;
+  const a = o.expiration_date;
+  const b = o.expirationDate;
+  if (typeof a === "string" && a.length > 0) return a;
+  if (typeof b === "string" && b.length > 0) return b;
+  return undefined;
 }
 
 export type CreatePixInput = {
@@ -49,7 +104,8 @@ export function extractPagouDetail(json: unknown): string | undefined {
   const j = json as Record<string, unknown>;
   const pick = (v: unknown) =>
     typeof v === "string" && v.trim() ? v.trim() : undefined;
-  const fromMsg = pick(j.message) ?? pick(j.error) ?? pick(j.detail);
+  const fromMsg =
+    pick(j.message) ?? pick(j.error) ?? pick(j.detail) ?? pick(j.title);
   if (fromMsg) return fromMsg;
   const errs = j.errors;
   if (Array.isArray(errs) && errs[0] && typeof errs[0] === "object") {
@@ -69,6 +125,7 @@ export function getPagouApiBase(): string {
 
 export async function createPixTransaction(
   input: CreatePixInput,
+  request?: Request,
 ): Promise<CreatePixResult> {
   const key = normalizePagouApiKey(process.env.PAGOU_API_KEY);
   if (!key) {
@@ -83,7 +140,7 @@ export async function createPixTransaction(
     };
   }
 
-  const notifyUrl = getWebhookNotifyUrl();
+  const notifyUrl = resolveWebhookNotifyUrl(request);
   const externalRef = `ghdrol_${input.offer.units}u_${crypto.randomUUID()}`;
 
   const payload: Record<string, unknown> = {
@@ -105,11 +162,7 @@ export async function createPixTransaction(
     ],
   };
 
-  /** Diagnóstico: se a criação falhar, experimente PAGOU_OMIT_NOTIFY_URL=1 na Vercel (webhook omitido). */
-  const omitNotify =
-    process.env.PAGOU_OMIT_NOTIFY_URL === "1" ||
-    process.env.PAGOU_OMIT_NOTIFY_URL === "true";
-  if (notifyUrl && !omitNotify) payload.notify_url = notifyUrl;
+  if (notifyUrl) payload.notify_url = notifyUrl;
 
   let res: Response;
   try {
@@ -141,7 +194,7 @@ export async function createPixTransaction(
     data?: {
       id?: string;
       status?: string;
-      pix?: { qr_code?: string; expiration_date?: string | null };
+      pix?: unknown;
     };
   };
 
@@ -162,7 +215,8 @@ export async function createPixTransaction(
   }
 
   const id = envelope.data?.id;
-  const qr = envelope.data?.pix?.qr_code;
+  const pixObj = envelope.data?.pix;
+  const qr = pickPixField(pixObj, "qr_code", "qrCode");
   if (!id || !qr) {
     return {
       ok: false,
@@ -181,7 +235,7 @@ export async function createPixTransaction(
     id,
     status: envelope.data?.status ?? "pending",
     qrCode: qr,
-    expirationDate: envelope.data?.pix?.expiration_date ?? null,
+    expirationDate: pickExpiration(pixObj) ?? null,
     externalRef,
   };
 }

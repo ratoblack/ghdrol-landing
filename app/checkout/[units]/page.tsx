@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { PixCheckoutForm } from "@/components/checkout/PixCheckoutForm";
 import type { OfferUnits } from "@/lib/checkout";
 import { getPagouCheckoutUrl } from "@/lib/checkout";
+import { normalizePagouApiKey } from "@/lib/pagou";
 import { getOfferByUnits } from "@/lib/offers";
 
 const VALID = new Set<OfferUnits>(["1", "2", "3", "5"]);
@@ -21,7 +22,7 @@ export default async function CheckoutPage({ params }: Props) {
   if (!offer) notFound();
 
   const hasApiKeyConfigured = Boolean(
-    process.env.PAGOU_API_KEY?.trim()?.length,
+    normalizePagouApiKey(process.env.PAGOU_API_KEY),
   );
 
   return (
