@@ -12,6 +12,8 @@ function isOfferUnits(u: string): u is OfferUnits {
   return (VALID as string[]).includes(u);
 }
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   let body: unknown;
   try {
@@ -85,16 +87,21 @@ export async function POST(request: Request) {
     return NextResponse.json(payload, { status: result.status });
   }
 
-  await savePendingOrder({
-    transactionId: result.id,
-    externalRef: result.externalRef,
-    units: b.units,
-    email,
-    name,
-    amountCents: offer.amountCents,
-    createdAt: new Date().toISOString(),
-    ...(tracking ? { tracking } : {}),
-  });
+  try {
+    await savePendingOrder({
+      transactionId: result.id,
+      externalRef: result.externalRef,
+      units: b.units,
+      email,
+      name,
+      amountCents: offer.amountCents,
+      createdAt: new Date().toISOString(),
+      ...(tracking ? { tracking } : {}),
+    });
+  } catch (persistErr) {
+    console.error("[create-pix] savePendingOrder:", persistErr);
+    /** Pix já criado na Pagou — não falhamos o cliente se só o Redis/log falhou. */
+  }
 
   return NextResponse.json({
     id: result.id,

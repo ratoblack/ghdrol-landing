@@ -8,6 +8,9 @@ import { getOfferByUnits } from "@/lib/offers";
 
 const VALID = new Set<OfferUnits>(["1", "2", "3", "5"]);
 
+/** Obrigatório na Vercel: lê PAGOU_API_KEY em runtime, não na build (senão o Pix fica “desligado”). */
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ units: string }> };
 
 export default async function CheckoutPage({ params }: Props) {
