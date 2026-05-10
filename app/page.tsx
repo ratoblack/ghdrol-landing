@@ -25,7 +25,7 @@ import { Faq } from "@/components/landing/Faq";
 export default function HomePage() {
   return (
     <>
-      <main className="flex-1 pb-28">
+      <main className="flex-1 pb-[calc(7rem+env(safe-area-inset-bottom,0px))]">
         <Hero />
         <IntroBlocks />
         <ScienceSection />

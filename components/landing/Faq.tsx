@@ -39,12 +39,12 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="border-t border-white/10 bg-gh-surface py-16">
+    <section className="border-t border-white/10 bg-gh-surface py-12 sm:py-16">
       <div className="container-page">
-        <h2 className="font-display text-center text-4xl uppercase text-gh-gold-bright sm:text-5xl">
+        <h2 className="font-display text-center text-balance text-3xl uppercase text-gh-gold-bright sm:text-4xl md:text-5xl">
           Perguntas frequentes
         </h2>
-        <div className="mx-auto mt-10 max-w-3xl divide-y divide-white/10 rounded-lg border border-white/10 bg-black/40">
+        <div className="mx-auto mt-10 max-w-xl divide-y divide-white/10 rounded-lg border border-white/10 bg-black/40 sm:max-w-3xl">
           {FAQ_ITEMS.map((item, i) => {
             const isOpen = open === i;
             return (

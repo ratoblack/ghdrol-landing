@@ -46,13 +46,13 @@ const BENEFITS: { title: string; body: string }[] = [
 
 export function ScienceSection() {
   return (
-    <section className="border-t border-white/10 bg-black/30 py-16">
+    <section className="border-t border-white/10 bg-black/30 py-12 sm:py-16">
       <div className="container-page">
         <SectionTitle as="h2">Fórmula com tecnologia avançada</SectionTitle>
-        <p className="mx-auto max-w-3xl text-center text-sm leading-relaxed text-gh-muted sm:text-base">
+        <p className="mx-auto max-w-xl text-center text-sm leading-relaxed text-gh-muted sm:max-w-3xl sm:text-base">
           Após meses de estudos sobre performance física e fatores que atrasam resultados, a linha GHDROL foi desenvolvida para atuar em múltiplas frentes da evolução corporal — sempre combinada a treino, dieta e descanso.
         </p>
-        <p className="mx-auto mt-4 max-w-3xl text-center text-sm text-gh-muted sm:text-base">
+        <p className="mx-auto mt-4 max-w-xl text-center text-sm text-gh-muted sm:max-w-3xl sm:text-base">
           Finalmente disponível no Brasil para quem busca definição, hipertrofia e performance com protocolo claro.
         </p>
         <div className="mt-12 flex justify-center">
@@ -75,16 +75,16 @@ export function AudienceList() {
     "Começou na academia e quer evoluir mais rápido com base",
   ];
   return (
-    <section className="py-14">
+    <section className="py-12 sm:py-14">
       <div className="container-page">
         <SectionTitle as="h2" subtitle="O GHDROL é para quem:">
           Você se identifica?
         </SectionTitle>
-        <ul className="mx-auto grid max-w-3xl gap-3 sm:grid-cols-2">
+        <ul className="mx-auto grid max-w-xl gap-3 sm:max-w-3xl sm:grid-cols-2">
           {items.map((t) => (
             <li
               key={t}
-              className="flex gap-2 rounded-lg border border-white/10 bg-gh-surface/60 px-4 py-3 text-sm text-gh-muted"
+              className="flex gap-2 rounded-lg border border-white/10 bg-gh-surface/60 px-3 py-3 text-sm text-gh-muted sm:px-4"
             >
               <span className="text-gh-gold">✓</span>
               <span>{t}</span>
@@ -98,12 +98,12 @@ export function AudienceList() {
 
 export function FactorsSection() {
   return (
-    <section className="border-t border-white/10 bg-gh-surface py-14">
+    <section className="border-t border-white/10 bg-gh-surface py-12 sm:py-14">
       <div className="container-page text-center">
-        <h2 className="font-display text-3xl uppercase text-gh-gold-bright sm:text-4xl">
+        <h2 className="text-balance font-display text-2xl uppercase text-gh-gold-bright sm:text-3xl md:text-4xl">
           Fatores determinantes para a evolução
         </h2>
-        <p className="mx-auto mt-6 max-w-3xl text-sm leading-relaxed text-gh-muted sm:text-base">
+        <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gh-muted sm:mt-6 sm:max-w-3xl sm:text-base">
           O GHDROL foi pensado para acompanhar quem leva treino a sério: hormônios, recuperação, nutrição e estímulo certo são os pilares. O suplemento potencializa o terreno — você traz o trabalho duro.
         </p>
       </div>
@@ -113,16 +113,16 @@ export function FactorsSection() {
 
 export function BenefitsGrid() {
   return (
-    <section className="py-16">
+    <section className="py-12 sm:py-16">
       <div className="container-page">
         <SectionTitle as="h2">Como o GHDROL atua?</SectionTitle>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {BENEFITS.map((b) => (
             <article
               key={b.title}
-              className="rounded-xl border border-gh-gold/20 bg-gradient-to-b from-gh-surface to-black/50 p-5"
+              className="rounded-xl border border-gh-gold/20 bg-gradient-to-b from-gh-surface to-black/50 p-4 sm:p-5"
             >
-              <h3 className="font-display text-xl uppercase tracking-wide text-gh-gold-bright">
+              <h3 className="font-display text-lg uppercase tracking-wide text-gh-gold-bright sm:text-xl">
                 {b.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-gh-muted">{b.body}</p>
@@ -139,11 +139,11 @@ export function BenefitsGrid() {
 
 export function MidCtaBanner() {
   return (
-    <section className="border-y border-gh-gold/40 bg-gradient-to-r from-black via-gh-surface to-black py-12 text-center">
-      <h2 className="font-display text-3xl uppercase text-white sm:text-4xl">
+    <section className="border-y border-gh-gold/40 bg-gradient-to-r from-black via-gh-surface to-black py-10 text-center sm:py-12">
+      <h2 className="text-balance px-2 font-display text-2xl uppercase text-white sm:text-3xl md:text-4xl">
         GHDROL redefine seus limites
       </h2>
-      <p className="mx-auto mt-4 max-w-2xl text-gh-muted">
+      <p className="mx-auto mt-4 max-w-lg px-2 text-sm text-gh-muted sm:max-w-2xl sm:text-base">
         Acesse o máximo do seu físico com treino, nutrição e o protocolo certo. Seu corpo e sua rotina podem atingir outro patamar.
       </p>
       <div className="mt-8 flex justify-center">

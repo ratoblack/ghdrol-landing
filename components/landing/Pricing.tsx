@@ -6,13 +6,13 @@ import { TrackedCheckoutLink } from "./TrackedCheckoutLink";
 
 export function Pricing() {
   return (
-    <section id="oferta" className="scroll-mt-24 py-16">
+    <section id="oferta" className="scroll-mt-24 py-12 sm:py-16">
       <div className="container-page">
         <SectionTitle as="h2" subtitle="Promoção por tempo limitado">
           Escolha seu kit GHDROL
         </SectionTitle>
 
-        <div className="mx-auto max-w-3xl rounded-xl border border-gh-gold/30 bg-gh-surface/80 p-6 text-center">
+        <div className="mx-auto max-w-3xl rounded-xl border border-gh-gold/30 bg-gh-surface/80 p-4 text-center sm:p-6">
           <p className="text-sm text-gh-muted">
             Promoção com até <strong className="text-white">40% OFF</strong>{" "}
             neste lote + protocolo de treino exclusivo para compradores.
@@ -22,11 +22,11 @@ export function Pricing() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <div className="mt-10 flex flex-col items-center gap-6 lg:grid lg:grid-cols-2 lg:gap-6">
           {OFFERS.map((o) => (
             <article
               key={o.units}
-              className={`relative flex flex-col overflow-hidden rounded-2xl border bg-gradient-to-b from-gh-surface to-black/80 p-6 ${
+              className={`relative flex w-full max-w-md flex-col overflow-hidden rounded-2xl border bg-gradient-to-b from-gh-surface to-black/80 p-4 sm:p-6 lg:max-w-none ${
                 o.badge === "mais vendido!"
                   ? "border-gh-gold shadow-[0_0_40px_rgba(201,162,39,0.2)]"
                   : "border-white/10"
@@ -57,7 +57,7 @@ export function Pricing() {
                     <span className="line-through">{o.crossedPrice}</span>
                   </p>
                   <p className="text-sm text-gh-muted">por apenas 12x de</p>
-                  <p className="font-display text-4xl text-gh-gold-bright">
+                  <p className="font-display text-3xl text-gh-gold-bright sm:text-4xl">
                     {o.installments}
                   </p>
                   <p className="text-sm text-white">
@@ -67,7 +67,7 @@ export function Pricing() {
               </div>
               <TrackedCheckoutLink
                 units={o.units}
-                className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-gradient-to-b from-gh-gold-bright to-gh-gold py-3 text-center text-base font-bold uppercase tracking-wide text-black transition hover:brightness-110"
+                className="mt-6 inline-flex w-full max-w-sm items-center justify-center self-center rounded-md bg-gradient-to-b from-gh-gold-bright to-gh-gold py-3 text-center text-sm font-bold uppercase tracking-wide text-black transition hover:brightness-110 sm:max-w-none sm:self-stretch sm:text-base"
               >
                 Quero comprar este
               </TrackedCheckoutLink>

@@ -4,7 +4,7 @@ import { SectionTitle } from "./SectionTitle";
 
 export function Hero() {
   return (
-    <section className="relative min-h-[88svh] overflow-hidden border-b border-gh-gold/30">
+    <section className="relative min-h-[72svh] overflow-hidden border-b border-gh-gold/30 sm:min-h-[80svh] md:min-h-[88svh]">
       {/* Foto do produto — full bleed, foco no frasco à direita em desktop */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -17,15 +17,15 @@ export function Hero() {
         />
       </div>
 
-      {/* Escurece o lado do texto + transparência para o produto respirar */}
+      {/* Escurece o lado do texto — mais contraste no mobile */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/50 via-black/65 to-black/85 md:bg-gradient-to-r md:from-black md:via-black/80 md:to-transparent"
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/55 via-black/72 to-black/88 md:bg-gradient-to-r md:from-black md:via-black/80 md:to-transparent"
         aria-hidden
       />
 
       {/* Halo amarelo (eco do glow da foto) */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_70%_at_72%_55%,rgba(234,179,8,0.14),transparent_55%)] mix-blend-screen opacity-90 md:opacity-100"
+        className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_70%_at_72%_55%,rgba(234,179,8,0.12),transparent_55%)] mix-blend-screen opacity-80 sm:opacity-90 md:opacity-100"
         aria-hidden
       />
 
@@ -42,18 +42,18 @@ export function Hero() {
         aria-hidden
       />
 
-      <div className="container-page relative z-10 flex min-h-[88svh] flex-col justify-center py-14 md:py-20">
-        <div className="max-w-xl text-center md:max-w-2xl md:text-left">
-          <p className="font-display text-3xl uppercase tracking-wide text-gh-gold drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:text-4xl">
+      <div className="container-page relative z-10 flex min-h-[72svh] flex-col justify-center py-12 sm:min-h-[80svh] sm:py-14 md:min-h-[88svh] md:py-20">
+        <div className="mx-auto max-w-xl text-center md:mx-0 md:max-w-2xl md:text-left">
+          <p className="text-balance font-display text-2xl uppercase tracking-wide text-gh-gold drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:text-3xl md:text-4xl">
             | GHDROL | OFICIAL |
           </p>
-          <h1 className="mt-4 font-display text-4xl uppercase leading-[1.05] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.95)] sm:text-5xl lg:text-6xl">
+          <h1 className="mt-3 text-balance font-display text-3xl uppercase leading-snug tracking-tight text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.95)] sm:mt-4 sm:text-4xl sm:leading-[1.05] md:text-5xl lg:text-6xl">
             A fórmula mais avançada para transformar o corpo de forma rápida
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-sm uppercase leading-relaxed text-white/85 md:mx-0 md:text-base">
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/90 normal-case sm:mt-6 sm:uppercase md:mx-0 md:text-base">
             GHDROL eleva o corpo à máxima performance física, íntima e hipertrofia muscular, com ganhos de massa e resultados visíveis em poucas semanas — conforme rotina e organismo.
           </p>
-          <p className="mx-auto mt-4 max-w-xl text-sm font-semibold text-white drop-shadow-md md:mx-0">
+          <p className="mx-auto mt-3 max-w-xl text-sm font-semibold leading-snug text-white drop-shadow-md normal-case sm:mt-4 md:mx-0">
             Redefina seus limites e descubra por que o GHDROL age no que atrasa a evolução e potencializa o que importa no treino.
           </p>
           <div className="mt-8 flex justify-center md:justify-start">
@@ -67,12 +67,12 @@ export function Hero() {
 
 export function IntroBlocks() {
   return (
-    <section className="py-14">
-      <div className="container-page space-y-10">
+    <section className="py-12 sm:py-14">
+      <div className="container-page space-y-8 sm:space-y-10">
         <SectionTitle as="h2" subtitle="Novidade no Brasil">
           Transformação em tempo recorde
         </SectionTitle>
-        <div className="prose prose-invert mx-auto max-w-none text-center">
+        <div className="prose prose-invert mx-auto max-w-xl text-center text-[15px] leading-relaxed sm:max-w-3xl sm:px-0 sm:text-base">
           <p className="text-gh-muted">
             Você está pronto para transformar seu corpo em tempo recorde? Conheça{" "}
             <strong className="text-white">GHDROL</strong>, a fórmula ultra
@@ -80,9 +80,9 @@ export function IntroBlocks() {
             treinos. Prepare-se para redefinir seus limites.
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2">
-          <article className="rounded-xl border border-white/10 bg-gh-surface/80 p-6">
-            <h3 className="font-display text-2xl uppercase text-gh-gold">
+        <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+          <article className="rounded-xl border border-white/10 bg-gh-surface/80 p-4 sm:p-6">
+            <h3 className="font-display text-xl uppercase text-gh-gold sm:text-2xl">
               Resultado aparente em poucas semanas
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-gh-muted">
@@ -91,8 +91,8 @@ export function IntroBlocks() {
               dependem de organismo, sono, dieta e estímulo de treino.
             </p>
           </article>
-          <article className="rounded-xl border border-white/10 bg-gh-surface/80 p-6">
-            <h3 className="font-display text-2xl uppercase text-gh-gold">
+          <article className="rounded-xl border border-white/10 bg-gh-surface/80 p-4 sm:p-6">
+            <h3 className="font-display text-xl uppercase text-gh-gold sm:text-2xl">
               Uso simples no dia a dia
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-gh-muted">

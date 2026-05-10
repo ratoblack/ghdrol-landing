@@ -5,12 +5,14 @@ const WA =
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 bg-black py-12">
+    <footer className="border-t border-white/10 bg-black py-10 sm:py-12">
       <div className="container-page text-center text-sm text-gh-muted">
-        <h3 className="font-display text-2xl uppercase text-gh-gold">
+        <h3 className="font-display text-xl uppercase text-gh-gold sm:text-2xl">
           Dúvidas?
         </h3>
-        <p className="mt-3">Fale com nosso suporte pelo WhatsApp.</p>
+        <p className="mx-auto mt-3 max-w-xl text-balance">
+          Fale com nosso suporte pelo WhatsApp.
+        </p>
         <Link
           href={WA}
           target="_blank"

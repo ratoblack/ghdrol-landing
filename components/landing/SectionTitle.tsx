@@ -12,12 +12,12 @@ export function SectionTitle({
   subtitle,
 }: Props) {
   return (
-    <div className={`mb-8 text-center ${className}`}>
-      <Tag className="font-display text-4xl uppercase tracking-tight text-gh-gold-bright sm:text-5xl md:text-6xl">
+    <div className={`mb-6 text-center sm:mb-8 ${className}`}>
+      <Tag className="text-balance font-display text-3xl uppercase tracking-tight text-gh-gold-bright sm:text-4xl md:text-5xl lg:text-6xl">
         {children}
       </Tag>
       {subtitle ? (
-        <p className="mt-3 text-sm uppercase tracking-widest text-gh-muted sm:text-base">
+        <p className="mt-2 text-balance text-xs uppercase text-gh-muted sm:mt-3 sm:text-base sm:tracking-wide md:tracking-widest">
           {subtitle}
         </p>
       ) : null}
