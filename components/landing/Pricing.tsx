@@ -66,7 +66,7 @@ export function Pricing() {
                 </div>
               </div>
               <Link
-                href={`/api/checkout/${o.units}`}
+                href={`/checkout/${o.units}`}
                 className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-gradient-to-b from-gh-gold-bright to-gh-gold py-3 text-center text-base font-bold uppercase tracking-wide text-black transition hover:brightness-110"
               >
                 Quero comprar este
