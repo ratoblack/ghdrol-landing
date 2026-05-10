@@ -1,7 +1,6 @@
 import Link from "next/link";
-
-const WA =
-  "https://api.whatsapp.com/send?phone=5551983455138&text=Ol%C3%A1%2C%20quero%20pedir%20meu%20GHDROL";
+import { SalesAssistantChat } from "@/components/landing/SalesAssistantChat";
+import { WHATSAPP_SUPPORT_URL } from "@/lib/whatsapp-support";
 
 export function SiteFooter() {
   return (
@@ -11,13 +10,15 @@ export function SiteFooter() {
           Dúvidas?
         </h3>
         <p className="mx-auto mt-3 max-w-xl text-balance">
-          Fale com nosso suporte pelo WhatsApp.
+          Primeiro use o assistente abaixo — as respostas são as mesmas desta página.
+          Depois, se quiser, fale com nosso suporte pelo WhatsApp.
         </p>
+        <SalesAssistantChat />
         <Link
-          href={WA}
+          href={WHATSAPP_SUPPORT_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 inline-flex rounded-md border border-green-500/50 bg-green-600/20 px-6 py-3 font-semibold text-green-300 transition hover:bg-green-600/30"
+          className="mt-6 inline-flex rounded-md border border-green-500/50 bg-green-600/20 px-6 py-3 font-semibold text-green-300 transition hover:bg-green-600/30"
         >
           Tirar dúvidas pelo WhatsApp
         </Link>
