@@ -123,6 +123,93 @@ export function getPagouApiBase(): string {
     : "https://api-sandbox.pagou.ai";
 }
 
+/** bearer (default) | apikey — @see https://developer.pagou.ai/start-here/authentication */
+export function buildPagouJsonHeaders(rawKey: string): Record<string, string> {
+  const mode = (process.env.PAGOU_AUTH_MODE ?? "bearer").toLowerCase().trim();
+  const h: Record<string, string> = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+  if (mode === "apikey" || mode === "api_key") {
+    h.apiKey = rawKey;
+  } else {
+    h.Authorization = `Bearer ${rawKey}`;
+  }
+  return h;
+}
+
+export function buildPagouGetHeaders(rawKey: string): Record<string, string> {
+  const mode = (process.env.PAGOU_AUTH_MODE ?? "bearer").toLowerCase().trim();
+  const h: Record<string, string> = { Accept: "application/json" };
+  if (mode === "apikey" || mode === "api_key") {
+    h.apiKey = rawKey;
+  } else {
+    h.Authorization = `Bearer ${rawKey}`;
+  }
+  return h;
+}
+
+async function parsePagouResponseBody(res: Response): Promise<{
+  json: unknown;
+  rawSnippet?: string;
+  parseFailed?: boolean;
+}> {
+  const text = await res.text();
+  const rawSnippet = text.trim() ? text.slice(0, 500) : undefined;
+  if (!text.trim()) return { json: null };
+  try {
+    return { json: JSON.parse(text) as unknown, rawSnippet };
+  } catch {
+    return { json: null, rawSnippet, parseFailed: true };
+  }
+}
+
+/** GET /v2/transactions — valida token sem criar cobrança (quickstart Pagou). */
+export async function probePagouTransactionsList(rawKey: string): Promise<{
+  httpStatus: number;
+  authOk: boolean;
+  detail?: string;
+  requestId?: string;
+}> {
+  try {
+    const res = await fetch(`${getPagouApiBase()}/v2/transactions?limit=1`, {
+      method: "GET",
+      headers: buildPagouGetHeaders(rawKey),
+      cache: "no-store",
+    });
+    const { json, rawSnippet, parseFailed } = await parsePagouResponseBody(res);
+    let detail: string | undefined;
+    if (parseFailed) {
+      detail = `Resposta não-JSON (HTTP ${res.status}). Confirme PAGOU_ENV e o host ${getPagouApiBase()}.`;
+      if (rawSnippet) detail += ` Trecho: ${rawSnippet.slice(0, 160)}`;
+    } else {
+      detail =
+        extractPagouDetail(json) ??
+        (!res.ok ? `HTTP ${res.status}` : undefined);
+    }
+    const rid =
+      json &&
+      typeof json === "object" &&
+      !Array.isArray(json) &&
+      typeof (json as Record<string, unknown>).requestId === "string"
+        ? ((json as Record<string, unknown>).requestId as string)
+        : undefined;
+    return {
+      httpStatus: res.status,
+      authOk: res.ok && !parseFailed,
+      detail,
+      requestId: rid,
+    };
+  } catch (e) {
+    return {
+      httpStatus: 503,
+      authOk: false,
+      detail:
+        e instanceof Error ? e.message : "Falha de rede ao contactar a Pagou",
+    };
+  }
+}
+
 export async function createPixTransaction(
   input: CreatePixInput,
   request?: Request,
@@ -168,10 +255,7 @@ export async function createPixTransaction(
   try {
     res = await fetch(`${getPagouApiBase()}/v2/transactions`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
+      headers: buildPagouJsonHeaders(key),
       body: JSON.stringify(payload),
     });
   } catch (fetchErr) {
@@ -187,7 +271,19 @@ export async function createPixTransaction(
     };
   }
 
-  const json: unknown = await res.json().catch(() => null);
+  const { json, rawSnippet, parseFailed } = await parsePagouResponseBody(res);
+
+  if (parseFailed) {
+    return {
+      ok: false,
+      status: res.status >= 400 ? res.status : 502,
+      body: {
+        error: "pagou_non_json",
+        detail: `A Pagou devolveu corpo que não é JSON (HTTP ${res.status}). Confirme PAGOU_ENV e ${getPagouApiBase()}.`,
+        rawSnippet: rawSnippet ?? null,
+      },
+    };
+  }
 
   const envelope = json as {
     success?: boolean;
