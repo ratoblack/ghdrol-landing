@@ -1,26 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gh-bg: #070707;
+  --gh-surface: #111111;
+  --gh-gold: #c9a227;
+  --gh-gold-bright: #e8c547;
+  --gh-red: #c41e1e;
+  --gh-text: #f3f3f3;
+  --gh-muted: #b8b8b8;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-gh-bg: var(--gh-bg);
+  --color-gh-surface: var(--gh-surface);
+  --color-gh-gold: var(--gh-gold);
+  --color-gh-gold-bright: var(--gh-gold-bright);
+  --color-gh-red: var(--gh-red);
+  --color-gh-text: var(--gh-text);
+  --color-gh-muted: var(--gh-muted);
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bebas), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--gh-bg);
+  color: var(--gh-text);
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-5xl px-4 sm:px-6;
 }
