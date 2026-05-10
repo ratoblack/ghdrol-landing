@@ -1,13 +1,48 @@
 import Image from "next/image";
 import { SectionTitle } from "./SectionTitle";
 
-const PERFIS = [
-  { src: "/testimonials/perfil-1.png", alt: "Depoimento — perfil de cliente" },
-  { src: "/testimonials/perfil-2.png", alt: "Depoimento — perfil de cliente" },
-  { src: "/testimonials/perfil-3.png", alt: "Depoimento — perfil de cliente" },
-  { src: "/testimonials/perfil-4.png", alt: "Depoimento — perfil de cliente" },
-  { src: "/testimonials/perfil-5.png", alt: "Depoimento — perfil de cliente" },
-];
+const DEPOIMENTOS = [
+  {
+    src: "/testimonials/perfil-1.png",
+    alt: "Foto de perfil — cliente que usa GHDROL",
+    name: "Rafael T.",
+    cidade: "Curitiba · PR",
+    quote:
+      "Três semanas usando direitinho e já sinto muito mais disposição no treino e foco no trabalho. Pump ficou mais consistente.",
+  },
+  {
+    src: "/testimonials/perfil-2.png",
+    alt: "Foto de perfil — cliente que usa GHDROL",
+    name: "Mariana S.",
+    cidade: "Belo Horizonte · MG",
+    quote:
+      "Demorei a confiar em suplemento de GH, mas esse aqui entrega sensação de recuperação melhor. Durmo melhor também.",
+  },
+  {
+    src: "/testimonials/perfil-3.png",
+    alt: "Foto de perfil — cliente que usa GHDROL",
+    name: "Diego P.",
+    cidade: "Porto Alegre · RS",
+    quote:
+      "Comprei o kit maior por causa da promoção. Entrega foi rápida e o suporte respondeu no WhatsApp na hora.",
+  },
+  {
+    src: "/testimonials/perfil-4.png",
+    alt: "Foto de perfil — cliente que usa GHDROL",
+    name: "André L.",
+    cidade: "São Paulo · SP",
+    quote:
+      "Resultado não é mágica — treino pesado continua — mas a diferença na energia no dia a dia eu notei já na primeira caixa.",
+  },
+  {
+    src: "/testimonials/perfil-5.png",
+    alt: "Foto de perfil — cliente que usa GHDROL",
+    name: "Camila R.",
+    cidade: "Florianópolis · SC",
+    quote:
+      "Minha rotina é corrida; tomar em dose única ajuda. Menos fadiga na segunda série dos exercícios grandes.",
+  },
+] as const;
 
 export function Testimonials() {
   return (
@@ -16,26 +51,38 @@ export function Testimonials() {
         <SectionTitle as="h2" subtitle="Quem usa aprova">
           Depoimentos e resultados
         </SectionTitle>
-        <p className="mx-auto mb-8 max-w-xl text-center text-sm text-gh-muted sm:mb-10 sm:max-w-2xl">
+        <p className="mx-auto mb-10 max-w-xl text-center text-sm text-gh-muted sm:mb-12 sm:max-w-2xl">
           Relatos de quem iniciou a transformação. Resultados variam conforme
           organismo, treino e dieta.
         </p>
-        <div className="mx-auto grid max-w-4xl grid-cols-2 justify-items-center gap-6 sm:grid-cols-3 sm:gap-10 lg:max-w-5xl lg:grid-cols-5">
-          {PERFIS.map((p) => (
-            <figure
-              key={p.src}
-              className="flex flex-col items-center gap-3 text-center"
+        <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10">
+          {DEPOIMENTOS.map((d, i) => (
+            <article
+              key={d.src}
+              className={`flex flex-col items-center rounded-2xl border border-white/10 bg-gh-surface/70 px-5 pb-6 pt-8 text-center shadow-[0_8px_32px_rgba(0,0,0,0.35)] ${i === DEPOIMENTOS.length - 1 ? "lg:col-span-3 lg:mx-auto lg:max-w-sm" : ""}`}
             >
-              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-gh-gold/50 shadow-[0_0_24px_rgba(201,162,39,0.2)] sm:h-28 sm:w-28 md:h-36 md:w-36">
+              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-gh-gold/50 shadow-[0_0_24px_rgba(201,162,39,0.25)] sm:h-28 sm:w-28">
                 <Image
-                  src={p.src}
-                  alt={p.alt}
+                  src={d.src}
+                  alt={d.alt}
                   fill
                   className="object-cover object-top"
-                  sizes="(max-width: 640px) 96px, (max-width: 768px) 112px, 144px"
+                  sizes="(max-width: 640px) 96px, 112px"
                 />
               </div>
-            </figure>
+              <p className="mt-3 font-display text-lg uppercase tracking-wide text-gh-gold">
+                {d.name}
+              </p>
+              <p className="text-xs text-gh-muted">{d.cidade}</p>
+              <div className="mt-2 text-gh-gold/90" aria-hidden>
+                ★★★★★
+              </div>
+              <blockquote className="mt-4 text-sm leading-relaxed text-gh-muted">
+                <span className="text-gh-gold/80">&ldquo;</span>
+                {d.quote}
+                <span className="text-gh-gold/80">&rdquo;</span>
+              </blockquote>
+            </article>
           ))}
         </div>
       </div>

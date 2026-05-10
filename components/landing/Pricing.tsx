@@ -14,8 +14,8 @@ export function Pricing() {
 
         <div className="mx-auto max-w-3xl rounded-xl border border-gh-gold/30 bg-gh-surface/80 p-4 text-center sm:p-6">
           <p className="text-sm text-gh-muted">
-            Promoção com até <strong className="text-white">40% OFF</strong>{" "}
-            neste lote + protocolo de treino exclusivo para compradores.
+            Promoção com até <strong className="text-white">40% OFF</strong> neste
+            lote — frete grátis para todo o Brasil e suporte pelo WhatsApp.
           </p>
           <p className="mt-2 text-xs uppercase tracking-wider text-gh-gold">
             Oportunidade única — sujeita à disponibilidade de estoque
@@ -49,9 +49,9 @@ export function Pricing() {
                   <h3 className="font-display text-2xl uppercase text-white">
                     {o.label}
                   </h3>
-                  <p className="mt-1 text-sm text-gh-gold">frete grátis</p>
+                  <p className="mt-1 text-sm text-gh-gold">frete grátis Brasil</p>
                   <p className="text-sm text-gh-muted">
-                    + protocolo de treino exclusivo
+                    suporte e rastreio no e-mail
                   </p>
                   <p className="mt-3 text-sm text-gh-muted">
                     <span className="line-through">{o.crossedPrice}</span>

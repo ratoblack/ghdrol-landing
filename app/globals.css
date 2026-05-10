@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --gh-bg: #070707;
-  --gh-surface: #111111;
+  --gh-bg: #020202;
+  --gh-surface: #0c0c0c;
   --gh-gold: #c9a227;
   --gh-gold-bright: #e8c547;
   --gh-red: #c41e1e;

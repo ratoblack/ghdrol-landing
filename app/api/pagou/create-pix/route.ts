@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { OfferUnits } from "@/lib/checkout";
+import { digitsOnly, isValidCPFDigits } from "@/lib/cpf";
 import { createPixTransaction } from "@/lib/pagou";
 import { savePendingOrder } from "@/lib/order-store";
 import { getOfferByUnits } from "@/lib/offers";
@@ -9,10 +10,6 @@ const VALID: OfferUnits[] = ["1", "2", "3", "5"];
 
 function isOfferUnits(u: string): u is OfferUnits {
   return (VALID as string[]).includes(u);
-}
-
-function digitsOnly(s: string): string {
-  return s.replace(/\D/g, "");
 }
 
 export async function POST(request: Request) {
@@ -48,6 +45,16 @@ export async function POST(request: Request) {
   if (cpfDigits.length !== 11) {
     return NextResponse.json({ error: "CPF inválido (11 dígitos)" }, { status: 400 });
   }
+  if (!isValidCPFDigits(cpfDigits)) {
+    return NextResponse.json(
+      {
+        error: "CPF inválido",
+        detail:
+          "Confira os dígitos do CPF. A Pagou recusa documentos com dígitos verificadores incorretos.",
+      },
+      { status: 400 },
+    );
+  }
 
   const offer = getOfferByUnits(b.units);
   if (!offer) {
@@ -60,7 +67,22 @@ export async function POST(request: Request) {
   });
 
   if (!result.ok) {
-    return NextResponse.json(result.body, { status: result.status });
+    const raw = result.body;
+    const payload: Record<string, unknown> =
+      raw !== null && typeof raw === "object" && !Array.isArray(raw)
+        ? { ...(raw as Record<string, unknown>) }
+        : { error: String(raw) };
+
+    if (result.status === 401 && !payload.detail) {
+      payload.detail =
+        "Pagou recusou o token. Verifique PAGOU_API_KEY e se PAGOU_ENV (sandbox ou production) corresponde ao token no painel Pagou.";
+    }
+    if (result.status === 403 && !payload.detail) {
+      payload.detail =
+        "Acesso negado pela Pagou. Confira permissões da chave e se a conta está ativa.";
+    }
+
+    return NextResponse.json(payload, { status: result.status });
   }
 
   await savePendingOrder({

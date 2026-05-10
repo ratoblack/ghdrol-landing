@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import QRCode from "react-qr-code";
+import { digitsOnly, isValidCPFDigits } from "@/lib/cpf";
 import type { Offer } from "@/lib/offers";
 import { TRACKING_QUERY_KEYS } from "@/lib/tracking";
 
@@ -38,7 +39,7 @@ export function PixCheckoutForm({
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [document, setDocument] = useState("");
+  const [cpfInput, setCpfInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pix, setPix] = useState<PixPayload | null>(null);
@@ -46,6 +47,15 @@ export function PixCheckoutForm({
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    const cpfDigits = digitsOnly(cpfInput);
+    if (cpfDigits.length !== 11) {
+      setError("CPF precisa ter 11 dígitos.");
+      return;
+    }
+    if (!isValidCPFDigits(cpfDigits)) {
+      setError("CPF inválido — verifique os dígitos antes de gerar o Pix.");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("/api/pagou/create-pix", {
@@ -55,7 +65,7 @@ export function PixCheckoutForm({
           units: offer.units,
           name,
           email,
-          document,
+          document: cpfInput,
           ...(tracking ? { tracking } : {}),
         }),
       });
@@ -197,11 +207,16 @@ export function PixCheckoutForm({
           required
           inputMode="numeric"
           className="mt-1 w-full rounded border border-white/20 bg-black/40 px-3 py-2 text-gh-text"
-          value={document}
-          onChange={(e) => setDocument(e.target.value)}
+          value={cpfInput}
+          onChange={(e) => setCpfInput(e.target.value)}
           autoComplete="off"
           placeholder="000.000.000-00"
         />
+        <p className="mt-1 text-xs text-gh-muted">
+          Use um CPF válido com{" "}
+          <strong className="text-white/90">11 dígitos</strong> (pontuação é
+          ignorada).
+        </p>
       </div>
       {error ? (
         <p className="rounded bg-red-950/50 px-3 py-2 text-sm text-red-200">

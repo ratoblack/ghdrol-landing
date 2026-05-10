@@ -1,40 +1,3 @@
-import Image from "next/image";
-
-export function ProtocolSection() {
-  return (
-    <section className="border-t border-white/10 bg-gh-surface py-12 sm:py-16">
-      <div className="container-page md:flex md:items-center md:gap-10">
-        <div className="flex-1">
-          <h2 className="text-balance font-display text-2xl uppercase text-gh-gold-bright sm:text-3xl md:text-4xl">
-            Protocolo de treinos exclusivo
-          </h2>
-          <p className="mt-4 text-sm leading-relaxed text-gh-muted sm:text-base">
-            Planilha focada em hipertrofia, referências old school e adaptação ao
-            Brasil — macetes para levar o treino ao próximo nível.
-          </p>
-          <ul className="mt-6 space-y-2 text-sm text-gh-muted">
-            <li>• Treino voltado a ganho de massa magra com controle de gordura</li>
-            <li>• Técnicas usadas em preparação de atletas</li>
-            <li>• Traduzida e adaptada ao seu dia a dia na academia</li>
-          </ul>
-          <p className="mt-4 text-xs text-gh-gold">
-            * Enviado ao e-mail cadastrado após a compra confirmada.
-          </p>
-        </div>
-        <div className="relative mx-auto mt-8 w-full max-w-md shrink-0 md:mt-0">
-          <Image
-            src="https://ghmuscle.com.br/wp-content/uploads/2023/08/planilha-treino.png"
-            alt="Prévia do protocolo de treino Ghmuscle"
-            width={600}
-            height={600}
-            className="rounded-lg border border-white/10 object-contain"
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function GuaranteeSection() {
   return (
     <section className="py-12 sm:py-14">
@@ -43,7 +6,7 @@ export function GuaranteeSection() {
           Satisfação garantida
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-sm text-gh-muted sm:max-w-2xl sm:text-base">
-          Confiamos no protocolo: você tem garantia de satisfação conforme as
+          Confiamos na fórmula: você tem garantia de satisfação conforme as
           condições divulgadas na oferta (60 dias). Consulte regras no checkout e
           no pós-venda.
         </p>

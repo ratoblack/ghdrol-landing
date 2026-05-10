@@ -12,7 +12,6 @@ import {
   AboutSection,
   DecisionSection,
   GuaranteeSection,
-  ProtocolSection,
   TrustSection,
   WarningSection,
   WhySection,
@@ -20,6 +19,7 @@ import {
 import { Pricing } from "@/components/landing/Pricing";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { Testimonials } from "@/components/landing/Testimonials";
+import { WhatsAppPrintsCarousel } from "@/components/landing/WhatsAppPrintsCarousel";
 import { Faq } from "@/components/landing/Faq";
 
 export default function HomePage() {
@@ -34,6 +34,7 @@ export default function HomePage() {
         <BenefitsGrid />
         <MidCtaBanner />
         <Testimonials />
+        <WhatsAppPrintsCarousel />
         <WhySection />
         <GuaranteeSection />
         <Suspense
@@ -41,7 +42,6 @@ export default function HomePage() {
         >
           <Pricing />
         </Suspense>
-        <ProtocolSection />
         <DecisionSection />
         <AboutSection />
         <WarningSection />

@@ -19,19 +19,19 @@ export function Hero() {
 
       {/* Escurece o lado do texto — mais contraste no mobile */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/55 via-black/72 to-black/88 md:bg-gradient-to-r md:from-black md:via-black/80 md:to-transparent"
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/78 via-black/86 to-black/93 md:bg-gradient-to-r md:from-black md:via-black/92 md:to-black/25"
         aria-hidden
       />
 
       {/* Halo amarelo (eco do glow da foto) */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_70%_at_72%_55%,rgba(234,179,8,0.12),transparent_55%)] mix-blend-screen opacity-80 sm:opacity-90 md:opacity-100"
+        className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_70%_at_72%_55%,rgba(234,179,8,0.08),transparent_55%)] mix-blend-screen opacity-55 sm:opacity-65 md:opacity-75"
         aria-hidden
       />
 
       {/* Vinheta nas bordas — aspecto “premium / hazard” contido */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_115%_100%_at_50%_50%,transparent_35%,rgba(0,0,0,0.55)_100%)]"
+        className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_115%_100%_at_50%_50%,transparent_35%,rgba(0,0,0,0.72)_100%)]"
         aria-hidden
       />
       <div
