@@ -1,9 +1,13 @@
 import Image from "next/image";
 import { SectionTitle } from "./SectionTitle";
 
+/**
+ * Fotos do carrossel «Quem usa aprova!» na página oficial de referência:
+ * https://ghmuscle.com.br/ghdrol/
+ */
 const DEPOIMENTOS = [
   {
-    src: "/testimonials/perfil-1.png",
+    src: "https://ghmuscle.com.br/wp-content/uploads/2026/03/1.png",
     alt: "Rafael — cliente que usa GHDROL",
     name: "Rafael T.",
     cidade: "Curitiba · PR",
@@ -11,7 +15,7 @@ const DEPOIMENTOS = [
       "Há três semanas na rotina certinha: mais disposição no treino e foco no trampo. O pump ficou bem mais consistente.",
   },
   {
-    src: "/testimonials/perfil-2.png",
+    src: "https://ghmuscle.com.br/wp-content/uploads/2025/05/2-4.png",
     alt: "Lucas — cliente que usa GHDROL",
     name: "Lucas M.",
     cidade: "Belo Horizonte · MG",
@@ -19,7 +23,7 @@ const DEPOIMENTOS = [
       "Eu era bem cético com GH em cápsula, mas senti recuperação melhor já nas primeiras semanas. Até durmo mais tranquilo.",
   },
   {
-    src: "/testimonials/perfil-3.png",
+    src: "https://ghmuscle.com.br/wp-content/uploads/2026/03/2.png",
     alt: "Diego — cliente que usa GHDROL",
     name: "Diego P.",
     cidade: "Porto Alegre · RS",
@@ -27,7 +31,7 @@ const DEPOIMENTOS = [
       "Peguei o kit maior pela promoção. Chegou rápido e o pessoal do WhatsApp me respondeu na hora.",
   },
   {
-    src: "/testimonials/perfil-4.png",
+    src: "https://ghmuscle.com.br/wp-content/uploads/2025/05/4-4.png",
     alt: "André — cliente que usa GHDROL",
     name: "André L.",
     cidade: "São Paulo · SP",
@@ -35,7 +39,7 @@ const DEPOIMENTOS = [
       "Não é mágica — continuo treinando pesado — mas a energia no dia a dia eu notei já na primeira caixa.",
   },
   {
-    src: "/testimonials/perfil-5.png",
+    src: "https://ghmuscle.com.br/wp-content/uploads/2025/05/5-1.png",
     alt: "Camila — cliente que usa GHDROL",
     name: "Camila R.",
     cidade: "Florianópolis · SC",
@@ -58,7 +62,7 @@ export function Testimonials() {
         <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10">
           {DEPOIMENTOS.map((d, i) => (
             <article
-              key={d.src}
+              key={`${d.name}-${i}`}
               className={`flex flex-col items-center rounded-2xl border border-white/10 bg-gh-surface/70 px-5 pb-6 pt-8 text-center shadow-[0_8px_32px_rgba(0,0,0,0.35)] ${i === DEPOIMENTOS.length - 1 ? "lg:col-span-3 lg:mx-auto lg:max-w-sm" : ""}`}
             >
               <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-gh-gold/50 shadow-[0_0_24px_rgba(201,162,39,0.25)] sm:h-28 sm:w-28">
