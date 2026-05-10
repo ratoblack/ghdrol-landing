@@ -123,6 +123,40 @@ export function getPagouApiBase(): string {
     : "https://api-sandbox.pagou.ai";
 }
 
+/** Detalhe legível para falhas de fetch no Node (Undici), inclui `cause` e errno. */
+export function formatNodeFetchError(err: unknown): string {
+  const parts: string[] = [];
+  let cur: unknown = err;
+  let depth = 0;
+  while (cur && depth < 10) {
+    if (cur instanceof Error) {
+      parts.push(cur.message);
+      const ne = cur as NodeJS.ErrnoException;
+      if (typeof ne.code === "string") parts.push(`errno=${ne.code}`);
+      cur = cur.cause;
+    } else if (typeof cur === "string") {
+      parts.push(cur);
+      break;
+    } else break;
+    depth++;
+  }
+  const out = [...new Set(parts.filter(Boolean))].join(" · ");
+  return out || "Erro desconhecido de rede";
+}
+
+/** Avisos sem expor a chave (só prefixos públicos). */
+export function pagouEnvMismatchHints(apiKey: string | undefined): string[] {
+  const out: string[] = [];
+  if (!apiKey) return out;
+  const prod = process.env.PAGOU_ENV === "production";
+  if (apiKey.startsWith("sk_live") && !prod) {
+    out.push(
+      "Token com prefixo sk_live_ é de PRODUÇÃO: define PAGOU_ENV=production na Vercel e faz redeploy (caso contrário chamamos api-sandbox.pagou.ai).",
+    );
+  }
+  return out;
+}
+
 /** bearer (default) | apikey — @see https://developer.pagou.ai/start-here/authentication */
 export function buildPagouJsonHeaders(rawKey: string): Record<string, string> {
   const mode = (process.env.PAGOU_AUTH_MODE ?? "bearer").toLowerCase().trim();
@@ -201,11 +235,11 @@ export async function probePagouTransactionsList(rawKey: string): Promise<{
       requestId: rid,
     };
   } catch (e) {
+    console.error("[pagou] probe fetch:", e);
     return {
       httpStatus: 503,
       authOk: false,
-      detail:
-        e instanceof Error ? e.message : "Falha de rede ao contactar a Pagou",
+      detail: formatNodeFetchError(e),
     };
   }
 }
@@ -265,8 +299,7 @@ export async function createPixTransaction(
       status: 503,
       body: {
         error: "pagou_unreachable",
-        detail:
-          "Não foi possível ligar à API Pagou a partir do servidor (rede ou DNS). Tente de novo; se persistir, verifique status Pagou ou bloqueios.",
+        detail: `${formatNodeFetchError(fetchErr)} (destino: ${getPagouApiBase()})`,
       },
     };
   }

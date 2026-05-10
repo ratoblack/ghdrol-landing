@@ -5,6 +5,7 @@ import {
   getPublicBaseUrl,
   getWebhookNotifyUrl,
   normalizePagouApiKey,
+  pagouEnvMismatchHints,
   probePagouTransactionsList,
 } from "@/lib/pagou";
 
@@ -25,8 +26,11 @@ export async function GET(request: NextRequest) {
     probeListTransactions = await probePagouTransactionsList(key);
   }
 
+  const envHints = pagouEnvMismatchHints(key);
+
   return NextResponse.json({
     apiKeyLooksConfigured: hasKey,
+    envMismatchHints: envHints.length ? envHints : undefined,
     authMode:
       (process.env.PAGOU_AUTH_MODE ?? "bearer").toLowerCase().trim() || "bearer",
     pagouEnv:
