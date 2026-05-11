@@ -7,7 +7,10 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="border-t border-white/10 bg-gh-surface py-12 sm:py-16">
+    <section
+      id="perguntas-frequentes"
+      className="border-t border-white/10 bg-gh-surface py-12 sm:py-16"
+    >
       <div className="container-page">
         <h2 className="font-display text-center text-balance text-3xl uppercase text-gh-gold-bright sm:text-4xl md:text-5xl">
           Perguntas frequentes

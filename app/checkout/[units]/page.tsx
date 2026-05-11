@@ -1,6 +1,7 @@
-import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { CheckoutPageChrome } from "@/components/checkout/CheckoutPageChrome";
 import { PixCheckoutForm } from "@/components/checkout/PixCheckoutForm";
 import type { OfferUnits } from "@/lib/checkout";
 import { getPagouCheckoutUrl } from "@/lib/checkout";
@@ -14,6 +15,19 @@ export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ units: string }> };
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { units } = await params;
+  if (!VALID.has(units as OfferUnits)) {
+    return { title: "Checkout | GHDROL" };
+  }
+  const offer = getOfferByUnits(units as OfferUnits);
+  if (!offer) return { title: "Checkout | GHDROL" };
+  return {
+    title: `Checkout — ${offer.label} | GHDROL`,
+    description: `Finalize no Pix: ${offer.label}, ${offer.cashPrice} à vista. Frete grátis.`,
+  };
+}
+
 export default async function CheckoutPage({ params }: Props) {
   const { units } = await params;
   if (!VALID.has(units as OfferUnits)) notFound();
@@ -26,40 +40,26 @@ export default async function CheckoutPage({ params }: Props) {
   );
 
   return (
-    <main className="min-h-screen bg-gh-bg py-12 text-gh-text">
-      <div className="container-page max-w-lg">
-        <p className="font-display text-xl uppercase text-gh-gold">
-          Checkout GHDROL
-        </p>
-        <h1 className="mt-2 font-display text-3xl uppercase text-white">
-          {offer.label}
-        </h1>
-        <p className="mt-1 text-gh-muted">
-          Valor à vista: <strong className="text-white">{offer.cashPrice}</strong>
-        </p>
-        <div className="mt-8">
-          <Suspense
-            fallback={
-              <div
-                className="h-64 animate-pulse rounded-xl bg-white/5"
-                aria-busy="true"
-              />
-            }
-          >
-            <PixCheckoutForm
-              offer={offer}
-              hasApiKeyConfigured={hasApiKeyConfigured}
-              hostedCheckoutUrl={getPagouCheckoutUrl(offer.units)}
-            />
-          </Suspense>
-        </div>
-        <Link
-          href="/#oferta"
-          className="mt-8 inline-block w-full text-center text-sm text-gh-gold underline"
-        >
-          ← Outra oferta
-        </Link>
-      </div>
-    </main>
+    <CheckoutPageChrome offer={offer}>
+      <Suspense
+        fallback={
+          <div
+            className="h-56 animate-pulse rounded-xl bg-white/5"
+            aria-busy="true"
+          />
+        }
+      >
+        <PixCheckoutForm
+          offer={offer}
+          hasApiKeyConfigured={hasApiKeyConfigured}
+          hostedCheckoutUrl={getPagouCheckoutUrl(offer.units)}
+          variant="embedded"
+        />
+      </Suspense>
+      <p className="mt-6 border-t border-white/10 pt-4 text-center text-[11px] leading-relaxed text-gh-muted">
+        Ao continuar, concorda com a compra e políticas do canal. Suporte na
+        página inicial: perguntas frequentes e WhatsApp.
+      </p>
+    </CheckoutPageChrome>
   );
 }

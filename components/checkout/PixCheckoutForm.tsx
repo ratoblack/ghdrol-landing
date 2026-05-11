@@ -13,6 +13,8 @@ type Props = {
   hasApiKeyConfigured: boolean;
   /** URL de checkout hospedado Pagou (só preenchida no servidor). */
   hostedCheckoutUrl?: string | null;
+  /** Dentro do cartão “Resumo” do CheckoutPageChrome (sem borda duplicada). */
+  variant?: "standalone" | "embedded";
 };
 
 type PixPayload = {
@@ -26,7 +28,9 @@ export function PixCheckoutForm({
   offer,
   hasApiKeyConfigured,
   hostedCheckoutUrl,
+  variant = "standalone",
 }: Props) {
+  const embed = variant === "embedded";
   const sp = useSearchParams();
   const tracking = useMemo(() => {
     const out: Record<string, string> = {};
@@ -95,7 +99,13 @@ export function PixCheckoutForm({
 
   if (pix) {
     return (
-      <div className="rounded-xl border border-gh-gold/40 bg-gh-surface/90 p-6 text-center">
+      <div
+        className={
+          embed
+            ? "rounded-xl border border-gh-gold/40 bg-black/40 p-5 text-center sm:p-6"
+            : "rounded-xl border border-gh-gold/40 bg-gh-surface/90 p-6 text-center"
+        }
+      >
         <h2 className="font-display text-2xl uppercase text-gh-gold-bright">
           Pague com Pix
         </h2>
@@ -134,7 +144,13 @@ export function PixCheckoutForm({
 
   if (!hasApiKeyConfigured) {
     return (
-      <div className="rounded-xl border border-yellow-700/50 bg-yellow-950/20 p-6 text-sm text-gh-muted">
+      <div
+        className={
+          embed
+            ? "rounded-xl border border-yellow-700/40 bg-yellow-950/25 p-5 text-sm text-gh-muted sm:p-6"
+            : "rounded-xl border border-yellow-700/50 bg-yellow-950/20 p-6 text-sm text-gh-muted"
+        }
+      >
         <p>
           <strong className="text-white">Pagou API não configurada.</strong>{" "}
           Defina <code className="text-gh-gold">PAGOU_API_KEY</code> no ambiente
@@ -168,15 +184,28 @@ export function PixCheckoutForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="space-y-4 rounded-xl border border-white/10 bg-gh-surface/80 p-6"
+      className={
+        embed
+          ? "space-y-4 border-t border-white/10 pt-6"
+          : "space-y-4 rounded-xl border border-white/10 bg-gh-surface/80 p-6"
+      }
     >
-      <h2 className="font-display text-2xl uppercase text-white">
+      <h2 className="font-display text-xl uppercase text-white sm:text-2xl">
         Seus dados
       </h2>
       <p className="text-sm text-gh-muted">
-        Necessários para emitir o Pix (Pagou v2).{" "}
-        <strong className="text-white">{offer.cashPrice}</strong> ·{" "}
-        {offer.label}
+        {embed ? (
+          <>
+            Informações para gerar o Pix via{" "}
+            <strong className="text-white/90">Pagou</strong>.
+          </>
+        ) : (
+          <>
+            Necessários para emitir o Pix (Pagou v2).{" "}
+            <strong className="text-white">{offer.cashPrice}</strong> ·{" "}
+            {offer.label}
+          </>
+        )}
       </p>
       <div>
         <label className="block text-xs uppercase text-gh-muted">

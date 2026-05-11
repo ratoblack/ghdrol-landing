@@ -1,5 +1,6 @@
 import type { OfferUnits } from "./checkout";
 
+/** Mesmos kits/imagens da página oficial; checkout aqui é /checkout/[units] com Pagou. */
 export type Offer = {
   units: OfferUnits;
   label: string;
