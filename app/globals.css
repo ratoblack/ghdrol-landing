@@ -8,6 +8,9 @@
   --gh-red: #c41e1e;
   --gh-text: #f3f3f3;
   --gh-muted: #b8b8b8;
+  /* Tipos carregados em runtime (layout.tsx); evita fetch no build do Turbopack. */
+  --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-bebas: "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
 }
 
 @theme inline {
@@ -18,8 +21,8 @@
   --color-gh-red: var(--gh-red);
   --color-gh-text: var(--gh-text);
   --color-gh-muted: var(--gh-muted);
-  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bebas), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-bebas);
 }
 
 body {
