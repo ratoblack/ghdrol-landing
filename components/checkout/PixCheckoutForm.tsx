@@ -13,8 +13,11 @@ type Props = {
   hasApiKeyConfigured: boolean;
   /** URL de checkout hospedado Pagou (só preenchida no servidor). */
   hostedCheckoutUrl?: string | null;
+  /** Dentro do cartão "Resumo" do CheckoutFunnel (sem borda duplicada). */
+  variant?: "standalone" | "embedded";
   /** Chamado quando o QR Pix fica disponível (avança etapas visuais). */
   onPixReady?: () => void;
+};
 
 type PixPayload = {
   id: string;
