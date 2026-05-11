@@ -33,7 +33,7 @@ export function CheckoutPageChrome({ offer, children }: Props) {
 
       <div className="container-page max-w-6xl py-8 sm:py-12">
         <div className="grid items-start gap-10 lg:grid-cols-[1fr_minmax(0,22rem)] xl:grid-cols-[1.15fr_minmax(0,24rem)] xl:gap-14">
-          <section className="space-y-6">
+          <section className="order-2 space-y-6 lg:order-1">
             <div
               className={`relative overflow-hidden rounded-2xl border bg-gradient-to-b from-gh-surface via-black/50 to-black p-6 sm:p-8 lg:p-10 ${
                 offer.badge === "mais vendido!"
@@ -63,9 +63,18 @@ export function CheckoutPageChrome({ offer, children }: Props) {
                   <p className="font-display text-xs uppercase tracking-[0.2em] text-gh-gold">
                     Checkout seguro · Pix
                   </p>
+                  <span className="inline-flex rounded-full border border-gh-gold/45 bg-gh-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-gh-gold-bright">
+                    No seu pedido:{" "}
+                    {offer.units === "1"
+                      ? "1 pote"
+                      : `${offer.units} potes`}
+                  </span>
                   <h1 className="font-display text-4xl uppercase leading-none text-white sm:text-5xl">
                     {offer.label}
                   </h1>
+                  <p className="font-display text-lg uppercase tracking-wide text-white/90">
+                    Arte oficial deste kit
+                  </p>
                   <p className="text-sm leading-relaxed text-gh-muted">
                     Mesmo kit da promoção na página oficial. Frete grátis para
                     todo o Brasil e processamento seguro via{" "}
@@ -95,41 +104,7 @@ export function CheckoutPageChrome({ offer, children }: Props) {
             </p>
           </section>
 
-          <aside className="lg:sticky lg:top-24">
-            <div className="rounded-2xl border border-gh-gold/35 bg-gradient-to-b from-gh-surface/95 to-black/90 p-6 shadow-[0_16px_48px_rgba(0,0,0,0.45)] sm:p-7">
-              <h2 className="border-b border-white/10 pb-4 text-center font-display text-xl uppercase tracking-wide text-white">
-                Resumo do pedido
-              </h2>
-
-              <div className="mt-5 space-y-1 text-center">
-                <p className="text-[11px] uppercase tracking-wider text-gh-muted">
-                  Promoção por tempo limitado
-                </p>
-                <p className="text-sm text-gh-muted">
-                  De{" "}
-                  <span className="line-through opacity-80">
-                    {offer.crossedPrice}
-                  </span>
-                </p>
-                <p className="mt-3 text-xs uppercase tracking-wide text-gh-muted">
-                  Parcelamento referência 12x
-                </p>
-                <p className="font-display text-4xl text-gh-gold-bright sm:text-5xl">
-                  {offer.installments}
-                </p>
-                <p className="mt-2 text-sm text-white">
-                  ou{" "}
-                  <strong className="text-gh-gold-bright">{offer.cashPrice}</strong>{" "}
-                  à vista no Pix
-                </p>
-                <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-gh-gold">
-                  Frete grátis · Todo o Brasil
-                </p>
-              </div>
-
-              <div className="mt-6">{children}</div>
-            </div>
-          </aside>
+          <aside className="order-1 lg:order-2 lg:sticky lg:top-24">{children}</aside>
         </div>
 
         <Link

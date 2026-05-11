@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { CheckoutPageChrome } from "@/components/checkout/CheckoutPageChrome";
-import { PixCheckoutForm } from "@/components/checkout/PixCheckoutForm";
+import { CheckoutFunnel } from "@/components/checkout/CheckoutFunnel";
 import type { OfferUnits } from "@/lib/checkout";
 import { getPagouCheckoutUrl } from "@/lib/checkout";
 import { normalizePagouApiKey } from "@/lib/pagou";
@@ -41,25 +40,11 @@ export default async function CheckoutPage({ params }: Props) {
 
   return (
     <CheckoutPageChrome offer={offer}>
-      <Suspense
-        fallback={
-          <div
-            className="h-56 animate-pulse rounded-xl bg-white/5"
-            aria-busy="true"
-          />
-        }
-      >
-        <PixCheckoutForm
-          offer={offer}
-          hasApiKeyConfigured={hasApiKeyConfigured}
-          hostedCheckoutUrl={getPagouCheckoutUrl(offer.units)}
-          variant="embedded"
-        />
-      </Suspense>
-      <p className="mt-6 border-t border-white/10 pt-4 text-center text-[11px] leading-relaxed text-gh-muted">
-        Ao continuar, concorda com a compra e políticas do canal. Suporte na
-        página inicial: perguntas frequentes e WhatsApp.
-      </p>
+      <CheckoutFunnel
+        offer={offer}
+        hasApiKeyConfigured={hasApiKeyConfigured}
+        hostedCheckoutUrl={getPagouCheckoutUrl(offer.units)}
+      />
     </CheckoutPageChrome>
   );
 }
